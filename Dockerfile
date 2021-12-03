@@ -6,4 +6,4 @@ USER node
 RUN npm install
 COPY --chown=node:node . .
 EXPOSE 4000
-CMD [ "npm", "dev" ]
+CMD [ "yarn", "dev" ]
