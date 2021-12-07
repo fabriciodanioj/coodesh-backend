@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const { getNewArticles } = require('../workers');
 
 module.exports = cron.schedule(
-  '*/2 * * * * *',
+  '*/60 * * * * *',
   async () => {
     await getNewArticles();
   },

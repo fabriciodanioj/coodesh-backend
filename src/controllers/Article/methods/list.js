@@ -9,7 +9,9 @@ const list = async (req, res) => {
   try {
     const { sort, page, perPage, order, filter } = req.query;
 
-    const query = {};
+    const query = {
+      title: filter,
+    };
 
     const pipeline = [{ $match: query }];
 

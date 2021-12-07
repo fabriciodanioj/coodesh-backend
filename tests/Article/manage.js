@@ -3,7 +3,7 @@ const app = require('../../src/app');
 
 const data = require('./data');
 
-let resource;
+let resource
 describe('Manage resources', () => {
   it('Should list all resources', (done) => {
     request(app)
@@ -12,7 +12,7 @@ describe('Manage resources', () => {
         const { body } = res;
 
         if (!body.data) throw Error('Not returned data');
-        if (!body.pagination.total) throw Error('Not paginated');
+        if (!body.total) throw Error('Not paginated');
 
         resource = body.data.pop();
       })
@@ -30,6 +30,17 @@ describe('Manage resources', () => {
       .expect(200, done);
   });
 
+  it('Should select a specific field', (done) => {
+    request(app)
+      .get(`${data.basePath}?fields=name`)
+      .expect((res) => {
+        const { body } = res;
+
+        if(Object.keys(body.data[0]).length != 2) throw Error('Return more fields');
+      })
+      .expect(200, done);
+  });
+
   it('Should get a resource', (done) => {
     request(app)
       .get(`${data.basePath}/${resource._id}`)
@@ -42,7 +53,9 @@ describe('Manage resources', () => {
   });
 
   it('Should get a resource', (done) => {
-    request(app).get(`${data.basePath}/usinginvalid`).expect(404, done);
+    request(app)
+      .get(`${data.basePath}/usinginvalid`)
+      .expect(404, done);
   });
 
   it('Should edit a resource', (done) => {
@@ -58,10 +71,14 @@ describe('Manage resources', () => {
   });
 
   it('Should delete a resource', (done) => {
-    request(app).delete(`${data.basePath}/${resource._id}`).expect(200, done);
+    request(app)
+      .delete(`${data.basePath}/${resource._id}`)
+      .expect(200, done);
   });
 
   it('Should resource be deleted', (done) => {
-    request(app).get(`${data.basePath}/${resource._id}`).expect(404, done);
+    request(app)
+      .get(`${data.basePath}/${resource._id}`)
+      .expect(404, done);
   });
 });
