@@ -8,5 +8,5 @@ const jobs = require('./src/jobs');
 app.listen(NODE_PORT, () => {
   console.warn(`[API] Server is running at ${NODE_HOST}:${NODE_PORT}`);
 
-  jobs();
+/*   if (NODE_ENV !== 'test') jobs(); */
 });

@@ -9,11 +9,13 @@ const list = async (req, res) => {
   try {
     const { sort, page, perPage, order, filter } = req.query;
 
-    const query = {
-      title: filter,
-    };
-
-    const pipeline = [{ $match: query }];
+    const pipeline = [];
+    /*   
+    if (filter) {
+      pipeline.push({
+        $match: { $or: [{ name: { $regex: filter, $options: 'i' } }] },
+      });
+    }  */
 
     const articleSortStage = sortStage({ sort, order });
     const articlePaginationStage = paginationStage({ page, perPage });
@@ -24,7 +26,7 @@ const list = async (req, res) => {
 
     article = handleEmptyAggregate(article[0]);
 
-    return res.status(200).json(article);
+    return res.status(200).json(article).end();
   } catch (error) {
     exception(error);
     return res.status(500).json(error);

@@ -11,31 +11,31 @@ describe('Article Registration', () => {
       .expect(400, done)
   })
 
-  it('Should register a resource', (done) => {
+  it('Should register an article', (done) => {
     request(app)
       .post(`${data.basePath}/`)
-      .send(data.resources[0])
+      .send(data.articles[0])
       .expect(201, done)
   })
 
-  it('Should register second resource', (done) => {
+  it('Should register second article', (done) => {
     request(app)
       .post(`${data.basePath}/`)
-      .send(data.resources[1])
+      .send(data.articles[1])
       .expect(201, done)
   })
 
-  it('Should register third resource', (done) => {
+  it('Should register third article', (done) => {
     request(app)
       .post(`${data.basePath}/`)
-      .send(data.resources[2])
+      .send(data.articles[2])
       .expect(201, done)
   })
 
-  it('Should register forth resource', (done) => {
+  it('Should register forth article', (done) => {
     request(app)
       .post(`${data.basePath}/`)
-      .send(data.resources[3])
+      .send(data.articles[3])
       .expect(201, done)
   })
 })

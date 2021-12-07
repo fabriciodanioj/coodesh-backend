@@ -3,7 +3,7 @@ const app = require("../../src/app");
 
 const data = require('./data')
 
-describe('User Registration', () => {
+describe('Resource Registration', () => {
   it('Should validate body', (done) => {
     request(app)
       .post(`${data.basePath}/`)

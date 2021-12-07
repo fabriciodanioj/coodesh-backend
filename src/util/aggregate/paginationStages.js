@@ -1,5 +1,5 @@
 module.exports = ({ page, perPage }) => {
-  perPage = parseInt(perPage) || 6;
+  perPage = parseInt(perPage) || 10;
   page = page >= 1 ? page : 1;
 
   return [
@@ -16,11 +16,19 @@ module.exports = ({ page, perPage }) => {
         ],
       },
     },
-    { $set: { pagination: { $arrayElemAt: ['$pagination', 0] } }},
-    { $set: { 'pagination.page': page }},
-    { $set: { 'pagination.perPage': perPage }},
-    { $set: { 'pagination.totalPages': { $divide: ['$pagination.total', perPage] } }},
-    { $set: { 'pagination.totalPages': { $ceil: '$pagination.totalPages' } }},
-    { $unset: 'pagination._id' }
+    { $set: { pagination: { $arrayElemAt: ['$pagination', 0] } } },
+    { $set: { 'pagination.page': page } },
+    { $set: { 'pagination.perPage': perPage } },
+    {
+      $set: {
+        'pagination.totalPages': { $divide: ['$pagination.total', perPage] },
+      },
+    },
+    {
+      $set: {
+        'pagination.totalPages': { $ceil: '$pagination.totalPages' },
+      },
+    },
+    { $unset: 'pagination._id' },
   ];
 };

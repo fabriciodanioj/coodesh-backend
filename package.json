@@ -8,7 +8,6 @@
     "test": "node ./tests/clear.database && NODE_ENV=test jest --forceExit"
   },
   "author": "Fabricio Dani <fabriciodanioj@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "axios": "^0.24.0",
     "bcrypt": "^4.0.1",

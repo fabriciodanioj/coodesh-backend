@@ -3,82 +3,67 @@ const app = require('../../src/app');
 
 const data = require('./data');
 
-let resource
-describe('Manage resources', () => {
-  it('Should list all resources', (done) => {
+let article;
+describe('Manage articles', () => {
+  it('Should list all articles', (done) => {
     request(app)
       .get(`${data.basePath}/`)
       .expect((res) => {
         const { body } = res;
 
-        if (!body.data) throw Error('Not returned data');
-        if (!body.total) throw Error('Not paginated');
+        console.log(body, 'body');
 
-        resource = body.data.pop();
+        if (!body.data) throw Error('Not returned data');
+        if (!body.pagination.total) throw Error('Not paginated');
+
+        article = body.data.pop();
       })
       .expect(200, done);
   });
 
-  it('Should paginate resources', (done) => {
+  it('Should paginate articles', (done) => {
     request(app)
       .get(`${data.basePath}?perPage=1`)
       .expect((res) => {
         const { body } = res;
 
-        if (body.data.length != 1) throw Error('Not Paginated');
+        if (body.pagination.perPage != 1) throw Error('Not Paginated');
       })
       .expect(200, done);
   });
 
-  it('Should select a specific field', (done) => {
+  it('Should get an article', (done) => {
     request(app)
-      .get(`${data.basePath}?fields=name`)
+      .get(`${data.basePath}/${article._id}`)
       .expect((res) => {
         const { body } = res;
 
-        if(Object.keys(body.data[0]).length != 2) throw Error('Return more fields');
+        if (body._id != article._id) throw Error('Not same article');
       })
       .expect(200, done);
   });
 
-  it('Should get a resource', (done) => {
+  it('Should reject an article with invalid id', (done) => {
+    request(app).get(`${data.basePath}/usinginvalid`).expect(404, done);
+  });
+
+  it('Should edit an article', (done) => {
     request(app)
-      .get(`${data.basePath}/${resource._id}`)
+      .put(`${data.basePath}/${article._id}`)
+      .send({ title: 'Edited article' })
       .expect((res) => {
         const { body } = res;
 
-        if (body._id != resource._id) throw Error('Not same resource');
+        if (body.title != 'Edited article') throw Error('Not edited');
       })
       .expect(200, done);
   });
 
-  it('Should get a resource', (done) => {
-    request(app)
-      .get(`${data.basePath}/usinginvalid`)
-      .expect(404, done);
+  it('Should delete an article', (done) => {
+    request(app).delete(`${data.basePath}/${article._id}`).expect(200, done);
   });
 
-  it('Should edit a resource', (done) => {
-    request(app)
-      .put(`${data.basePath}/${resource._id}`)
-      .send({ name: 'Edited resource' })
-      .expect((res) => {
-        const { body } = res;
-
-        if (body.name != 'Edited resource') throw Error('Not edited');
-      })
-      .expect(200, done);
-  });
-
-  it('Should delete a resource', (done) => {
-    request(app)
-      .delete(`${data.basePath}/${resource._id}`)
-      .expect(200, done);
-  });
-
-  it('Should resource be deleted', (done) => {
-    request(app)
-      .get(`${data.basePath}/${resource._id}`)
-      .expect(404, done);
+  it('Should article be deleted', (done) => {
+    request(app).get(`${data.basePath}/${article._id}`).expect(404, done);
   });
 });

@@ -1,10 +1,9 @@
 const mongo = require('mongodb').MongoClient;
 require('dotenv').config({ path: '.env.test' });
 
-const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOSTNAME, MONGO_PORT, MONGO_DB } =
-  process.env;
+const { MONGO_URI, MONGO_DB } = process.env;
 
-const uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
+const uri = `${MONGO_URI}/${MONGO_DB}`;
 
 mongo.connect(uri, async (err, conn) => {
   if (err) throw err;
