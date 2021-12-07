@@ -19,6 +19,36 @@
         "operationId": "listArticles",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -42,12 +72,7 @@
               "$ref": "#/definitions/Article"
             }
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       }
     },
 
@@ -94,7 +119,7 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Article object that needs to be updated to the databse",
+            "description": "Article object that needs to be updated to the database",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Article"
@@ -107,9 +132,6 @@
           },
           "404": {
             "description": "Article not found"
-          },
-          "405": {
-            "description": "Validation exception"
           }
         }
       },

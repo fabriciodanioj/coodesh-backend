@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const ArticleSchema = new Schema(
   {
-    spaceFlightId: Number,
+    spaceFlightId: { type: Number },
     featured: { type: Boolean, default: false },
     title: { type: String, required: true },
     url: { type: String, required: true },

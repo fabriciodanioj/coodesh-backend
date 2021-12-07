@@ -1,6 +1,6 @@
 const { spaceFlightAPI } = require('../apis');
 
-async function getArticles({ start, perPage }) {
+async function getArticles(start, perPage) {
   try {
     const response = await spaceFlightAPI.get(
       `/articles${start ? `?_start=${start}` : ''}${

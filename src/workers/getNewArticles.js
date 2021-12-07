@@ -2,22 +2,48 @@ const { getArticles, getArticlesCount } = require('../services/methods');
 const Article = require('../models/Article');
 
 async function getNewArticles() {
-  const articlesCount = await getArticlesCount();
+  const startTime = Date.now();
+  try {
+    const docsToInsert = [];
 
-  let test = [];
+    const articlesCount = await getArticlesCount();
 
-  const perPage = 500;
+    const articles = await getArticles(false, articlesCount);
 
-  const pages = (articlesCount % perPage) + 1;
+    const DBArticles = await Article.find();
 
-  for (let page = 0; page <= pages; page++) {
-   
-      const articles = await getArticles({ start: page * perPage, perPage });
-      articles.forEach((article) => test.push(article));
+    for (let article of articles) {
+      let articleAlreadyExists = false;
 
+      if (article.id) {
+        articleAlreadyExists = DBArticles.find(
+          (item) => item.spaceFlightId === article.id
+        );
+      }
+
+      if (!articleAlreadyExists) {
+        docsToInsert.push({
+          ...article,
+          spaceFlightId: article.id,
+        });
+      }
+    }
+
+    if (docsToInsert.length > 0) {
+      await Article.insertMany(docsToInsert)
+        .then((docs) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    console.log('ok');
+  } catch (error) {
+    console.log(error);
+  } finally {
+    const duration = (Number(Date.now()) - Number(startTime)) / 1000;
+    console.log(duration + 'segundos');
   }
-
-  console.log(test.length, 'lenght');
 }
 
 module.exports = getNewArticles;

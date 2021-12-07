@@ -5,8 +5,16 @@ const app = require('./src/app');
 
 const jobs = require('./src/jobs');
 
+const getNewArticles = require('./src/workers/getNewArticles');
+
 app.listen(NODE_PORT, () => {
   console.warn(`[API] Server is running at ${NODE_HOST}:${NODE_PORT}`);
 
-/*   if (NODE_ENV !== 'test') jobs(); */
+  if (NODE_ENV !== 'test') {
+    setTimeout(() => {
+      getNewArticles();
+    }, 10000);
+
+    jobs();
+  }
 });

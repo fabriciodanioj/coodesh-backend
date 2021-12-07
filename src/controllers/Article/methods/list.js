@@ -10,12 +10,17 @@ const list = async (req, res) => {
     const { sort, page, perPage, order, filter } = req.query;
 
     const pipeline = [];
-    /*   
+
     if (filter) {
       pipeline.push({
-        $match: { $or: [{ name: { $regex: filter, $options: 'i' } }] },
+        $match: {
+          $or: [
+            { title: { $regex: filter, $options: 'i' } },
+            { summary: { $regex: filter, $options: 'i' } },
+          ],
+        },
       });
-    }  */
+    }
 
     const articleSortStage = sortStage({ sort, order });
     const articlePaginationStage = paginationStage({ page, perPage });
